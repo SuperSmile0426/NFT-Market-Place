@@ -1,6 +1,11 @@
 require("@nomiclabs/hardhat-waffle");
 //const fs = require('fs');
 
+require('dotenv').config();
+
+
+const { ALCHEMY_KEY, ACCOUNT_PRIVATE_KEY } = process.env;
+
 //const privateKey = fs.readFileSync('.secret').toString()
 const privateKey = "79027970546b7ca606d0692fac237736f57c0509ab5edaf7d6dcd73cebf25def"
 module.exports = {
@@ -9,13 +14,13 @@ module.exports = {
       chainId:1137
     },
     mumbai: {
-      url: 'https://speedy-nodes-nyc.moralis.io/ae79ba3fa13e15d2997d279f/polygon/mumbai',
-      accounts: [privateKey]
+      url: `https://speedy-nodes-nyc.moralis.io/${ALCHEMY_KEY}/polygon/mumbai`,
+      accounts: [`0x${ACCOUNT_PRIVATE_KEY}`]
       
     },
     mainnet:{
-      url: 'https://speedy-nodes-nyc.moralis.io/ae79ba3fa13e15d2997d279f/polygon/mainnet',
-      accounts: [privateKey]
+      url: `https://speedy-nodes-nyc.moralis.io/${ALCHEMY_KEY}/polygon/mainnet`,
+      accounts: [ ACCOUNT_PRIVATE_KEY]
     }
   },
   solidity: "0.8.4",
