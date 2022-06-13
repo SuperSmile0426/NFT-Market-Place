@@ -24,7 +24,6 @@ const { ethers } = require("hardhat");
   });
 });*/
 
-describe("NFTMarket", function() {
   it("Should create and execute market sales", async function() {
     const Market = await ethers.getContractFactory("NFTMarket")
     const market = await Market.deploy()
@@ -41,8 +40,8 @@ describe("NFTMarket", function() {
 
     const auctionPrice = ethers.utils.parseUnits('1', 'ether')
 
-    await nft.createToken("https://www.mytokenlocation.com")
-    await nft.createToken("https://www.mytokenlocation2.com")
+    await nft.createToken("https://{gateway URL}/ipfs/{content ID}1/{optional path to resource}")
+    await nft.createToken("https://{gateway URL}/ipfs/{content ID}2/{optional path to resource}")
   
     await market.createMarketItem(nftContractAddress, 1, auctionPrice, { value: listingPrice })
     await market.createMarketItem(nftContractAddress, 2, auctionPrice, { value: listingPrice })
@@ -64,5 +63,37 @@ describe("NFTMarket", function() {
       return item
     }))
     console.log('items: ', items)
+  })
+//})
+
+describe("NFT Market", function (){
+  it('should create discounted sale at price 2% lower than actual price', async function(){
+    const Market = await ethers.getContractFactory("NFTMarket")
+    const market = await Market.deploy()
+    await market.deployed()
+    const marketAddress = market.address
+
+    const NFT = await ethers.getContractFactory("NFT")
+    const nft = await NFT.deploy(marketAddress)
+    await nft.deployed()
+    const nftContractAddress = nft.address
+
+    let listingPrice = await market.getListingPrice()
+    listingPrice = listingPrice.toString()
+
+    const discountedPrice = ethers.utils.parseUnits('100', 'ether')
+    const discounthours = 3 ;
+    await nft.createToken("https://{gateway URL}/ipfs/{content ID}3/{optional path to resource}")
+    await nft.createToken("https://{gateway URL}/ipfs/{content ID}4/{optional path to resource}")
+
+    await market.createDiscountedMarketitem(nftContractAddress, 1, discounthours, discountedPrice, { value: listingPrice })
+    await market.createDiscountedMarketitem(nftContractAddress, 2, discounthours, discountedPrice, { value: listingPrice })
+  
+    
+
+   
+
+    
+
   })
 })
